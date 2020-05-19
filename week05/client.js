@@ -1,4 +1,5 @@
 const net = require("net");
+const parser = require('../week06/parser.js');
 
 class Request {
     // method. url = host + port + path
@@ -53,7 +54,7 @@ ${this.bodyText}`
                 const parser = new ResponseParser()
 
                 connection.on("data", (data) => {
-                    console.log(data.toString())
+                    // console.log(data.toString())
                     parser.receive(data.toString());
                     if(parser.isFinished) {
                         connection.end();
@@ -104,7 +105,8 @@ class ResponseParser {
         return {
             statusCode: RegExp.$1,
             statusText: RegExp.$2,
-            response: this.bodyParser.content.join(''),
+            headers: this.headers,
+            body: this.bodyParser.content.join(''),
         }
     }
 
