@@ -1,3 +1,5 @@
+const {computeCSS, addCSSRules} = require("./css-computed");
+
 const EOF = Symbol('EOF');
 
 let currentToken = null;
@@ -27,8 +29,12 @@ function emit(token) {
             }
         }
 
-        top.children.push(element);
+        // 在computeCSS中需要寻找父元素，先设置parent
         element.parent = top;
+
+        computeCSS(element);
+
+        top.children.push(element);
 
         if (!token.isSelfClosing) {
             stack.push(element);
@@ -40,6 +46,12 @@ function emit(token) {
         if (top.tagName !== token.tagName) {
             throw new Error('Tag start and Tag end not match!');
         } else {
+
+            // +++++++++++++++++++++++++++++++++++++++++++++
+            if (top.tagName === 'style') {
+                addCSSRules(top.children[0].content)
+            }
+
             stack.pop();
         }
 
@@ -249,12 +261,11 @@ function endTagOpen(c) {
 }
 
 module.exports.parseHTML = function parseHTML(html) {
-    // console.log(html);
     let state = data;
     for (let c of html) {
         state = state(c);
     }
     state = state(EOF);
 
-    console.log(stack)
+    return stack[0];
 }

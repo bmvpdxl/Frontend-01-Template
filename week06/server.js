@@ -17,15 +17,20 @@ body div #myid{
     background-color: #ff5000;
 }
 body div img{
-    width:30px;
+    width: 30px;
     background-color: #ff1111;
+}
+
+body div img {
+    width: 99px;
+    height: 100px;
 }
     </style>
 </head>
 <body>
     <div>
         <img id="myid" class="myclass"/>
-        <img />
+        <img class="hello world" />
     </div>
 </body>
 </html>
